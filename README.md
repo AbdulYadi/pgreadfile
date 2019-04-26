@@ -1,4 +1,4 @@
-# pgqr
+# pgreadfile
 PostgreSQL extension to read binary file
 
 This project has been compiled successfully in Linux against PostgreSQL version 11.<br />
