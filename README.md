@@ -1,5 +1,5 @@
 # pgreadfile
-PostgreSQL extension to read binary file
+PostgreSQL extension to read file in binary format.
 
 This project has been compiled successfully in Linux against PostgreSQL version 11.<br />
 $ make clean<br />
