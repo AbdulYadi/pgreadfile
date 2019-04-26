@@ -6,9 +6,9 @@ $ make clean<br />
 $ make<br />
 $ make install<br />
 
-On successful compilation, install this extension in PostgreSQL environment<br />
+On successful compilation, install this extension in PostgreSQL environment.<br />
 $ create extension pgreadfile<br />
 
-Let us read a file<br />
+Let us read a file.<br />
 $ select pgreadfile('/tmp/myfile.dat');<br />
 The output is binary data in bytea.<br />
