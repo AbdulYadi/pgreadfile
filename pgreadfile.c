@@ -1,7 +1,7 @@
 #include <postgres.h>
 #include <fmgr.h>
 #ifdef PG_MODULE_MAGIC
-	PG_MODULE_MAGIC;
+PG_MODULE_MAGIC;
 #endif
 #include <lib/stringinfo.h>
 #include <utils/builtins.h>
@@ -11,6 +11,9 @@
 
 PG_FUNCTION_INFO_V1(pgreadfile);
 Datum pgreadfile(PG_FUNCTION_ARGS);
+
+PG_FUNCTION_INFO_V1(pgwritefile);
+Datum pgwritefile(PG_FUNCTION_ARGS);
 
 Datum
 pgreadfile(PG_FUNCTION_ARGS)
@@ -42,6 +45,42 @@ pgreadfile(PG_FUNCTION_ARGS)
 		PG_RETURN_NULL();
 	}
 
-
 	PG_RETURN_BYTEA_P(pq_endtypsend(&fileBytea));
+}
+
+Datum
+pgwritefile(PG_FUNCTION_ARGS)
+{
+	char* path;
+	bytea* bytes;
+	unsigned char* data;
+	int32 len;	
+	FILE* f;
+
+	if(PG_NARGS()!=2) {
+		elog(ERROR, "argument count must be 2");
+	}
+	
+	if(PG_ARGISNULL(0)) {
+		elog(ERROR, "filepath must be defined");
+	}
+	
+	if(PG_ARGISNULL(1)) {
+		elog(ERROR, "data must be defined");
+	}
+
+	path = TextDatumGetCString(PG_GETARG_DATUM(0));
+	bytes = PG_GETARG_BYTEA_PP(1);
+	data = (unsigned char*)VARDATA_ANY(bytes);
+	len = VARSIZE_ANY_EXHDR(bytes);	
+	
+	f = fopen(path, "wb");
+	if(f) {
+		fwrite((const void *)data, 1, len, f);
+		fclose(f);
+	} else {
+		PG_RETURN_VOID();
+	}
+
+	PG_RETURN_VOID();
 }
